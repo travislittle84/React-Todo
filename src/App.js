@@ -1,23 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react';
 
-import Todo from './components/TodoComponents/Todo';
 import TodoForm from './components/TodoComponents/TodoForm';
 import TodoList from './components/TodoComponents/TodoList';
 
+import "./components/TodoComponents/Todo.css"
+
+
 class App extends React.Component {
-  // you will need a place to store your state in this component.
-  // design `App` to be the parent component of your application.
-  // this component is going to take care of state, and any change handlers you need to work with your state
   constructor() {
     super();
     this.state = {
-      allTasks: []      
+      allTasks: [{
+        task: "Get food",
+        id: 1,
+        completed: false
+      }]      
     };
   }
   ignorethisfunction = event => {
     
-  };
+  }; // Strange VS Code error
 
   /*** Add Todo Task */
   addTodo = newTodo => {
@@ -30,12 +32,10 @@ class App extends React.Component {
     this.setState({
       allTasks: [...this.state.allTasks, newTodoItem]
     });
-    console.log("new todo:", this.state.allTasks)
   };
 
   /** Toogle Todo Task Item */
   toggleItem = id => {
-    console.log('yo')
     const newList = this.state.allTasks.map(task => {
       if (task.id === id) {
         const newObj = {
@@ -51,34 +51,32 @@ class App extends React.Component {
     this.setState({ allTasks: newList });
   };
 
-  // toggleTask = id => {
-  //   const newList = this.state.allTasks.map(task => {
-  //     if (task.id === id) {
-  //       const newObj = {
-  //         ...item,
-  //         completed: !task.completed
-  //       };
-  //       return newObj;
-  //     } else {
-  //       return task;
-  //     }
-  //     }
-  //   })
-  // };
+  /* Remove an item */
+  removeItem = id => {
+    const newList = this.state.allTasks.filter(task => task.id !== id);   
+    this.setState({allTasks: newList})
+  };
+
+
+  /* Clear completed */
+  clearCompleted = () => {
+    const notCompletedList = this.state.allTasks.filter(task => task.completed === false);
+    this.setState({allTasks: notCompletedList});
+  };
 
   render() {
     return (
-      <div>
-        <div>
-          <h1>Todo List</h1>
+      <div className="App">
+        <div className="list-title">
+          <h1>Todo List <i class="fas fa-check"></i></h1>
         </div>
-      <div>
-        <TodoList allTasks={this.state.allTasks} toggleItem={this.toggleItem}/>
-      </div>        
-        <TodoForm addTodo={this.addTodo} />
+        <div className="task-form">       
+          <TodoForm addTodo={this.addTodo} clearCompleted={this.clearCompleted} />
+        </div>
+          <TodoList allTasks={this.state.allTasks} toggleItem={this.toggleItem} removeItem={this.removeItem}/>
       </div>
     );
   }
-}
+};
 
 export default App;

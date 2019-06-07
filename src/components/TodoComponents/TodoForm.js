@@ -8,8 +8,7 @@ class TodoForm extends React.Component {
         };
     }
 
-    changefuckHandler = event => {
-
+    thisisherebecauseofwierdvscodeproblem = event => {
     }
 
     changeHandler = event => {
@@ -19,11 +18,18 @@ class TodoForm extends React.Component {
     submitHandler = event => {
         event.preventDefault();
         this.props.addTodo(this.state.todoItem);
+        this.setState({todoItem: ""})
     };
+
+    clearButtonHandler = event => {
+        event.preventDefault();
+        this.props.clearCompleted();
+    };
+
     render() {
         return (
             <div>
-                <h2>component form below</h2>
+                <h2>Get Stuff Done</h2>
                 <form onSubmit={this.submitHandler}>
                 <input 
                     type="text"
@@ -32,7 +38,7 @@ class TodoForm extends React.Component {
                     onChange={this.changeHandler}
                 />
                 <button type="submit">Add Todo</button>
-                <button>Clear</button>
+                <button id="clear-completed" onClick={this.clearButtonHandler}>Clear Completed</button>
                 </form>
             </div>
         );
