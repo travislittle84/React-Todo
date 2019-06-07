@@ -9,41 +9,73 @@ class App extends React.Component {
   // you will need a place to store your state in this component.
   // design `App` to be the parent component of your application.
   // this component is going to take care of state, and any change handlers you need to work with your state
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      // allTasks: tasks,
-      task: "",
-      id: "",
-      completed: "" 
+      allTasks: []      
     };
   }
   ignorethisfunction = event => {
     
   };
 
-  submitHandler = event => {
-    event.preventDefault();
-    console.log(this.state);
-  }
-
-  changeHandler = event => {
-    console.log(event.target.value)
-    console.log(event.target.name)
-    this.setState( {[event.target.name]: event.target.value} )
+  /*** Add Todo Task */
+  addTodo = newTodo => {
+    const newTodoItem = {
+      task: newTodo,
+      id: Date.now(),
+      completed: false
+    };
+    
+    this.setState({
+      allTasks: [...this.state.allTasks, newTodoItem]
+    });
+    console.log("new todo:", this.state.allTasks)
   };
+
+  /** Toogle Todo Task Item */
+  toggleItem = id => {
+    console.log('yo')
+    const newList = this.state.allTasks.map(task => {
+      if (task.id === id) {
+        const newObj = {
+          ...task,
+          completed: !task.completed
+        };
+        return newObj;
+      } else {
+        return task;
+      }
+    });
+
+    this.setState({ allTasks: newList });
+  };
+
+  // toggleTask = id => {
+  //   const newList = this.state.allTasks.map(task => {
+  //     if (task.id === id) {
+  //       const newObj = {
+  //         ...item,
+  //         completed: !task.completed
+  //       };
+  //       return newObj;
+  //     } else {
+  //       return task;
+  //     }
+  //     }
+  //   })
+  // };
 
   render() {
     return (
       <div>
+        <div>
+          <h1>Todo List</h1>
+        </div>
       <div>
-        <h1>Todo List</h1>
-      </div>
-      <div>
-        <TodoList />
-      </div>
-        
-        <TodoForm propSubmitHandler={this.submitHandler} propChangeHandler={this.changeHandler}/>
+        <TodoList allTasks={this.state.allTasks} toggleItem={this.toggleItem}/>
+      </div>        
+        <TodoForm addTodo={this.addTodo} />
       </div>
     );
   }
